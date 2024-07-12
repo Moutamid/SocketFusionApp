@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:onClick="back"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:fontFamily="@font/lexend_extra_bold"
+                android:text="Heating Time Options"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/lexend_light"
+            android:text="This slider value with the triangle below it will be the default heating time for each pipe size. The user can change to any value in this range (shown by the arrow used on the slider). Resolution is 1 second."
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/lexend_medium"
+            android:text="¾ IPS"
+            android:textSize="16sp" />
+
+        <com.warkiz.widget.IndicatorSeekBar
+            android:id="@+id/indicatorSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            app:isb_indicator_color="@color/appColor"
+            app:isb_indicator_text_color="@color/white"
+            app:isb_indicator_text_size="18sp"
+            app:isb_max="14"
+            app:isb_min="8"
+            app:isb_only_thumb_draggable="true"
+            app:isb_progress="11"
+            app:isb_seek_smoothly="true"
+            app:isb_show_indicator="circular_bubble"
+            app:isb_show_tick_text="true"
+            app:isb_thumb_color="@color/appColor"
+            app:isb_thumb_size="12dp"
+            app:isb_tick_count="2"
+            app:isb_tick_mark_size="13dp"
+            app:isb_tick_text_color="@color/appColor"
+            app:isb_tick_text_size="15sp"
+            app:isb_track_background_color="@color/appColor"
+            app:isb_track_background_size="2dp"
+            app:isb_track_progress_color="@color/appColor"
+            app:isb_track_progress_size="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lexend_medium"
+            android:text="1'' IPS"
+            android:textSize="16sp" />
+
+        <com.warkiz.widget.IndicatorSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            app:isb_indicator_color="@color/appColor"
+            app:isb_indicator_text_color="@color/white"
+            app:isb_indicator_text_size="18sp"
+            app:isb_max="17"
+            app:isb_min="15"
+            app:isb_only_thumb_draggable="true"
+            app:isb_progress="16"
+            app:isb_seek_smoothly="true"
+            app:isb_show_indicator="circular_bubble"
+            app:isb_show_tick_text="true"
+            app:isb_thumb_color="@color/appColor"
+            app:isb_thumb_size="12dp"
+            app:isb_tick_count="2"
+            app:isb_tick_mark_size="13dp"
+            app:isb_tick_text_color="@color/appColor"
+            app:isb_tick_text_size="15sp"
+            app:isb_track_background_color="@color/appColor"
+            app:isb_track_background_size="2dp"
+            app:isb_track_progress_color="@color/appColor"
+            app:isb_track_progress_size="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lexend_medium"
+            android:text="1-1/4'' IPS"
+            android:textSize="16sp" />
+
+        <com.warkiz.widget.IndicatorSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            app:isb_indicator_color="@color/appColor"
+            app:isb_indicator_text_color="@color/white"
+            app:isb_indicator_text_size="18sp"
+            app:isb_max="21"
+            app:isb_min="18"
+            app:isb_only_thumb_draggable="true"
+            app:isb_progress="19"
+            app:isb_seek_smoothly="true"
+            app:isb_show_indicator="circular_bubble"
+            app:isb_show_tick_text="true"
+            app:isb_thumb_color="@color/appColor"
+            app:isb_thumb_size="12dp"
+            app:isb_tick_count="2"
+            app:isb_tick_mark_size="13dp"
+            app:isb_tick_text_color="@color/appColor"
+            app:isb_tick_text_size="15sp"
+            app:isb_track_background_color="@color/appColor"
+            app:isb_track_background_size="2dp"
+            app:isb_track_progress_color="@color/appColor"
+            app:isb_track_progress_size="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lexend_medium"
+            android:text="1-1/2'' IPS"
+            android:textSize="16sp" />
+
+        <com.warkiz.widget.IndicatorSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            app:isb_indicator_color="@color/appColor"
+            app:isb_indicator_text_color="@color/white"
+            app:isb_indicator_text_size="18sp"
+            app:isb_max="23"
+            app:isb_min="20"
+            app:isb_only_thumb_draggable="true"
+            app:isb_progress="22"
+            app:isb_seek_smoothly="true"
+            app:isb_show_indicator="circular_bubble"
+            app:isb_show_tick_text="true"
+            app:isb_thumb_color="@color/appColor"
+            app:isb_thumb_size="12dp"
+            app:isb_tick_count="2"
+            app:isb_tick_mark_size="13dp"
+            app:isb_tick_text_color="@color/appColor"
+            app:isb_tick_text_size="15sp"
+            app:isb_track_background_color="@color/appColor"
+            app:isb_track_background_size="2dp"
+            app:isb_track_progress_color="@color/appColor"
+            app:isb_track_progress_size="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lexend_medium"
+            android:text="2'' IPS"
+            android:textSize="16sp" />
+
+        <com.warkiz.widget.IndicatorSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            app:isb_indicator_color="@color/appColor"
+            app:isb_indicator_text_color="@color/white"
+            app:isb_indicator_text_size="18sp"
+            app:isb_max="28"
+            app:isb_min="24"
+            app:isb_only_thumb_draggable="true"
+            app:isb_progress="26"
+            app:isb_seek_smoothly="true"
+            app:isb_show_indicator="circular_bubble"
+            app:isb_show_tick_text="true"
+            app:isb_thumb_color="@color/appColor"
+            app:isb_thumb_size="12dp"
+            app:isb_tick_count="2"
+            app:isb_tick_mark_size="13dp"
+            app:isb_tick_text_color="@color/appColor"
+            app:isb_tick_text_size="15sp"
+            app:isb_track_background_color="@color/appColor"
+            app:isb_track_background_size="2dp"
+            app:isb_track_progress_color="@color/appColor"
+            app:isb_track_progress_size="4dp" />
+    </LinearLayout>
+</ScrollView>

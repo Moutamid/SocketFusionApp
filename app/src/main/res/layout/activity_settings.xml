@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:onClick="back"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:fontFamily="@font/lexend_extra_bold"
+                android:text="Settings"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:onClick="timer"
+            android:layout_marginBottom="13dp"
+            android:fontFamily="@font/lexend_medium"
+            android:text="Timer options to make custom times"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/switchCountUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+
+            android:fontFamily="@font/lexend_medium"
+            android:text="Count Up"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/switchCountDown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:fontFamily="@font/lexend_medium"
+
+            android:text="Count Down"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/switchReadySound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:fontFamily="@font/lexend_medium"
+
+            android:text="Ready Sound"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/switchCompletionSound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+
+            android:fontFamily="@font/lexend_medium"
+            android:text="Completion Sound"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/switchVoiceCommands"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+
+            android:fontFamily="@font/lexend_medium"
+            android:text="Voice Commands"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/switchSoundOnly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+
+            android:fontFamily="@font/lexend_medium"
+            android:text="Sound Only Mode"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/switchVibrate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="8dp"
+            android:fontFamily="@font/lexend_medium"
+            android:text="Vibrate"
+            android:textSize="15sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/button_bg"
+            android:text="Next"
+            android:visibility="gone"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</ScrollView>

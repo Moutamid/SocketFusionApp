@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SocketFusionTimer" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+         <item name="colorPrimary">@color/appColor</item>
+         <item name="colorPrimaryDark">@color/appColor</item>
+         <item name="colorAccent">@color/appColor</item>
+    </style>
+
+    <style name="Theme.SocketFusionTimer" parent="Base.Theme.SocketFusionTimer" />
+</resources>
