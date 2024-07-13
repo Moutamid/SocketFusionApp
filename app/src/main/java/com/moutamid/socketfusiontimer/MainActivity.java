@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.fxn.stash.Stash;
 import com.moutamid.socketfusiontimer.adapter.PipeSizeAdapter;
 import com.moutamid.socketfusiontimer.model.PipeSize;
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private SoundPool soundPool;
     private int beepSound;
     private Handler handler;
+    private MediaPlayer mediaPlayer;
+    private MediaPlayer normal_mediaPlayer;
 
     private long initialDuration = 15000; // 14 seconds
     private long shortTimer1Duration = 3000; // 3 seconds
@@ -56,20 +60,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-checkApp(MainActivity.this);
+        checkApp(MainActivity.this);
         spinnerPipeSizes = findViewById(R.id.spinnerPipeSizes);
         layout = findViewById(R.id.layout);
-
         List<PipeSize> pipeSizes = new ArrayList<>();
         pipeSizes.add(new PipeSize("3/4\"", "#FF0000"));  // Red
         pipeSizes.add(new PipeSize("1\"", "#FFD700"));  // Yellow
         pipeSizes.add(new PipeSize("1-1/4\"", "#808080"));  // Gray
         pipeSizes.add(new PipeSize("1-1/2\"", "#008000"));  // Green
         pipeSizes.add(new PipeSize("2\"", "#0000FF"));  // Blue
-
         PipeSizeAdapter adapter = new PipeSizeAdapter(this, pipeSizes);
         spinnerPipeSizes.setAdapter(adapter);
-
         spinnerPipeSizes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -91,32 +92,39 @@ checkApp(MainActivity.this);
             public void onClick(View v) {
                 if (!isRunning) {
                     if (pos == 0) {
-                        initialDuration = 14000;
+                        int seekBar34 = Stash.getInt("seekBar34", 11);
+                        initialDuration = seekBar34 * 1000;
+
                         startInitialTimer();
                         finalDuration = 30000; // 30 seconds
 
                     } else if (pos == 1) {
-                        initialDuration = 17000;
+                        int seekBar1 = Stash.getInt("seekBar1", 11);
+                        initialDuration = seekBar1 * 1000;
                         startInitialTimer();
                         finalDuration = 30000; // 30 seconds
 
 
                     } else if (pos == 2) {
-                        initialDuration = 21000;
+                        int seekBar114 = Stash.getInt("seekBar114", 11);
+                        initialDuration = seekBar114 * 1000;
+
                         startInitialTimer();
-                        finalDuration = 60000; // 30 seconds
+                        finalDuration = 60000; // 60 seconds
 
 
                     } else if (pos == 3) {
-                        initialDuration = 23000;
+                        int seekBar112 = Stash.getInt("seekBar112", 11);
+                        initialDuration = seekBar112 * 1000;
                         startInitialTimer();
-                        finalDuration = 60000; // 30 seconds
+                        finalDuration = 60000; // 60 seconds
 
 
                     } else if (pos == 4) {
-                        initialDuration = 28000;
+                        int seekBar2 = Stash.getInt("seekBar2", 11);
+                        initialDuration = seekBar2 * 1000;
                         startInitialTimer();
-                        finalDuration = 60000; // 30 seconds
+                        finalDuration = 60000; // 60 seconds
 
 
                     }
@@ -152,25 +160,51 @@ checkApp(MainActivity.this);
 
         // Load the beep sound
         beepSound = soundPool.load(this, R.raw.beep, 1);
+        mediaPlayer = MediaPlayer.create(this, R.raw.completion_beep);
+
     }
 
     private void startInitialTimer() {
+
         heatingTimer = new CountDownTimer(initialDuration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                long seconds = millisUntilFinished / 1000;
+                if (Stash.getBoolean("sound_only", true)) {
+                }
+                else
+
+                {
+
+                }
+                    long seconds = millisUntilFinished / 1000;
                 timerTextView.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
 
                 if (millisUntilFinished > 4000) {
                     layout.setBackgroundColor(getColor(R.color.skyblue));
                 } else {
                     layout.setBackgroundColor(getColor(R.color.yellow));
+                    if (Stash.getBoolean("ready_sound", true)) {
                     playBeeps();
+                    }
                 }
-                if(millisUntilFinished<1000)
-                {                layout.setBackgroundColor(getColor(R.color.green));
+                if (millisUntilFinished < 1000) {
+                    if (Stash.getBoolean("ready_sound", true)) {
 
+                        if (soundPool != null) {
+                            soundPool.release();
+                        }
+                    }
+                    layout.setBackgroundColor(getColor(R.color.green));
+                    if (Stash.getBoolean("completion_sound", true)) {
 
+                        mediaPlayer.start();
+                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                releaseMediaPlayer();
+                            }
+                        });
+                    }
                 }
             }
 
@@ -183,24 +217,6 @@ checkApp(MainActivity.this);
         }.start();
     }
 
-    private void startShortTimer1() {
-        cooldownTimer = new CountDownTimer(shortTimer1Duration, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                long seconds = millisUntilFinished / 1000;
-                timerTextView.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
-                layout.setBackgroundColor(getColor(R.color.yellow));
-
-            }
-
-            @Override
-            public void onFinish() {
-                layout.setBackgroundColor(getColor(R.color.yellow));
-
-                startShortTimer2();
-            }
-        }.start();
-    }
 
     private void startShortTimer2() {
         cooldownTimer = new CountDownTimer(shortTimer2Duration, 1000) {
@@ -215,15 +231,13 @@ checkApp(MainActivity.this);
             @Override
             public void onFinish() {
                 startFinalTimer();
-                if (soundPool != null) {
-                    soundPool.release();
-                    soundPool = null;
-                }
+
             }
         }.start();
     }
 
     private void startFinalTimer() {
+
         heatingTimer = new CountDownTimer(finalDuration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -329,6 +343,13 @@ checkApp(MainActivity.this);
             }
 
         }).start();
+
     }
 
+    private void releaseMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
 }

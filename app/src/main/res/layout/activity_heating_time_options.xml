@@ -39,7 +39,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/lexend_light"
-            android:text="This slider value with the triangle below it will be the default heating time for each pipe size. The user can change to any value in this range (shown by the arrow used on the slider). Resolution is 1 second."
+            android:text="User can change to any value in this range. Resolution is 1 second."
             android:textSize="14sp" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:textSize="16sp" />
 
         <com.warkiz.widget.IndicatorSeekBar
-            android:id="@+id/indicatorSeekBar"
+            android:id="@+id/indicatorSeekBar34"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
@@ -85,6 +85,7 @@
             android:textSize="16sp" />
 
         <com.warkiz.widget.IndicatorSeekBar
+            android:id="@+id/indicatorSeekBar1"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
@@ -118,6 +119,7 @@
             android:textSize="16sp" />
 
         <com.warkiz.widget.IndicatorSeekBar
+            android:id="@+id/indicatorSeekBar114"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
@@ -151,6 +153,8 @@
             android:textSize="16sp" />
 
         <com.warkiz.widget.IndicatorSeekBar
+            android:id="@+id/indicatorSeekBar112"
+
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
@@ -184,6 +188,8 @@
             android:textSize="16sp" />
 
         <com.warkiz.widget.IndicatorSeekBar
+            android:id="@+id/indicatorSeekBar2"
+
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"

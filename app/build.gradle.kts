@@ -42,4 +42,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.github.moisoni97:IndicatorSeekBar:3.0.0")
+    implementation("com.fxn769:stash:1.3.2")
+
 }

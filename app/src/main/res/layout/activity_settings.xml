@@ -44,25 +44,23 @@
             android:textSize="15sp" />
 
         <Switch
-            android:id="@+id/switchCountUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-
-            android:fontFamily="@font/lexend_medium"
-            android:text="Count Up"
-            android:textSize="15sp" />
-
-        <Switch
             android:id="@+id/switchCountDown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:fontFamily="@font/lexend_medium"
-
-            android:text="Count Down"
+            android:text="Count Down / Count Down"
             android:textSize="15sp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-5dp"
+            android:layout_marginEnd="52dp"
+            android:fontFamily="@font/lexend_light"
+            android:text="(if you enable this it means, Starts a 0 and increases till the end range and vice versa)"
+            android:textSize="12sp" />
         <Switch
             android:id="@+id/switchReadySound"
             android:layout_width="match_parent"
