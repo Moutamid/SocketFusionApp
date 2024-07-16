@@ -43,5 +43,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.github.moisoni97:IndicatorSeekBar:3.0.0")
     implementation("com.fxn769:stash:1.3.2")
+    implementation("com.github.maxwellobi:android-speech-recognition:v1.0.0-beta.1")
 
 }

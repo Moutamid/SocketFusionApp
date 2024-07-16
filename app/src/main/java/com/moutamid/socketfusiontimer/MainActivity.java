@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -46,21 +48,25 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout layout;
     private SoundPool soundPool;
     private int beepSound;
+    private SoundPool normal_soundPool;
+    private int normal_beepSound;
     private Handler handler;
+    private Handler vibrationHandler; // New handler for vibrations
     private MediaPlayer mediaPlayer;
-    private MediaPlayer normal_mediaPlayer;
-
     private long initialDuration = 15000; // 14 seconds
     private long shortTimer1Duration = 3000; // 3 seconds
     private long shortTimer2Duration = 3000; // 4 seconds
     private long finalDuration = 30000; // 30 seconds
-    int pos;
+    private int pos;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkApp(MainActivity.this);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
         spinnerPipeSizes = findViewById(R.id.spinnerPipeSizes);
         layout = findViewById(R.id.layout);
         List<PipeSize> pipeSizes = new ArrayList<>();
@@ -96,14 +102,14 @@ public class MainActivity extends AppCompatActivity {
                         initialDuration = seekBar34 * 1000;
 
                         startInitialTimer();
-                        finalDuration = 30000; // 30 seconds
+//                        finalDuration = 30000; // 30 seconds
+                        finalDuration = 5000; // 30 seconds
 
                     } else if (pos == 1) {
                         int seekBar1 = Stash.getInt("seekBar1", 11);
                         initialDuration = seekBar1 * 1000;
                         startInitialTimer();
                         finalDuration = 30000; // 30 seconds
-
 
                     } else if (pos == 2) {
                         int seekBar114 = Stash.getInt("seekBar114", 11);
@@ -112,26 +118,23 @@ public class MainActivity extends AppCompatActivity {
                         startInitialTimer();
                         finalDuration = 60000; // 60 seconds
 
-
                     } else if (pos == 3) {
                         int seekBar112 = Stash.getInt("seekBar112", 11);
                         initialDuration = seekBar112 * 1000;
                         startInitialTimer();
                         finalDuration = 60000; // 60 seconds
 
-
                     } else if (pos == 4) {
                         int seekBar2 = Stash.getInt("seekBar2", 11);
                         initialDuration = seekBar2 * 1000;
                         startInitialTimer();
                         finalDuration = 60000; // 60 seconds
-
-
                     }
                     startStopButton.setText("Stop");
                     resetButton.setEnabled(false);
                 } else {
                     stopTimers();
+                    stopVibration(); // Stop vibrations when stopping the timer
                     startStopButton.setText("Restart");
                     resetButton.setEnabled(true);
                 }
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         handler = new Handler();
+        vibrationHandler = new Handler(); // Initialize the vibration handler
 
         // Initialize SoundPool
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -160,23 +164,56 @@ public class MainActivity extends AppCompatActivity {
 
         // Load the beep sound
         beepSound = soundPool.load(this, R.raw.beep, 1);
-        mediaPlayer = MediaPlayer.create(this, R.raw.completion_beep);
+// Initialize SoundPool
+        AudioAttributes audioAttributes1 = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
 
+        normal_soundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes1)
+                .build();
+
+        // Load the beep sound
+        normal_beepSound = normal_soundPool.load(this, R.raw.normal_beep, 1);
+        mediaPlayer = MediaPlayer.create(this, R.raw.completion_beep);
     }
 
     private void startInitialTimer() {
+        if (Stash.getBoolean("vibrate", false)) {
+            vibrationHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    // Vibrate for 100 milliseconds (adjust as needed)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        // Deprecated in API 26
+                        vibrator.vibrate(100);
+                    }
 
+                    // Schedule next vibration after 1 second
+                    vibrationHandler.postDelayed(this, 1000);
+                }
+            });
+        }
+        if (Stash.getBoolean("sound_only", false)) {
+            vibrationHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                  playNormalBeeps();
+                    vibrationHandler.postDelayed(this, 1000);
+                }
+            });
+
+        }
+        // Main CountDownTimer for timer display and actions
         heatingTimer = new CountDownTimer(initialDuration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if (Stash.getBoolean("sound_only", true)) {
-                }
-                else
-
-                {
-
-                }
-                    long seconds = millisUntilFinished / 1000;
+                // Your existing timer logic here
+                long seconds = millisUntilFinished / 1000;
                 timerTextView.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
 
                 if (millisUntilFinished > 4000) {
@@ -184,19 +221,18 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     layout.setBackgroundColor(getColor(R.color.yellow));
                     if (Stash.getBoolean("ready_sound", true)) {
-                    playBeeps();
+                        playBeeps();
                     }
                 }
                 if (millisUntilFinished < 1000) {
                     if (Stash.getBoolean("ready_sound", true)) {
-
                         if (soundPool != null) {
                             soundPool.release();
                         }
                     }
                     layout.setBackgroundColor(getColor(R.color.green));
                     if (Stash.getBoolean("completion_sound", true)) {
-
+                        if (mediaPlayer != null) {
                         mediaPlayer.start();
                         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
@@ -204,19 +240,19 @@ public class MainActivity extends AppCompatActivity {
                                 releaseMediaPlayer();
                             }
                         });
+                        }
                     }
                 }
             }
 
             @Override
             public void onFinish() {
+                // Final actions when timer finishes, if any
                 layout.setBackgroundColor(getColor(R.color.green));
                 startShortTimer2();
-
             }
         }.start();
     }
-
 
     private void startShortTimer2() {
         cooldownTimer = new CountDownTimer(shortTimer2Duration, 1000) {
@@ -225,30 +261,27 @@ public class MainActivity extends AppCompatActivity {
                 long seconds = millisUntilFinished / 1000;
                 timerTextView.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                 layout.setBackgroundColor(getColor(R.color.green));
-
             }
 
             @Override
             public void onFinish() {
                 startFinalTimer();
-
             }
         }.start();
     }
 
     private void startFinalTimer() {
-
         heatingTimer = new CountDownTimer(finalDuration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long seconds = millisUntilFinished / 1000;
                 timerTextView.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                 layout.setBackgroundColor(getColor(R.color.white));
-
             }
 
             @Override
             public void onFinish() {
+                stopVibration();
                 resetTimer();
             }
         }.start();
@@ -260,6 +293,15 @@ public class MainActivity extends AppCompatActivity {
         }
         if (cooldownTimer != null) {
             cooldownTimer.cancel();
+        }
+    }
+
+    private void stopVibration() {
+        if (vibrationHandler != null) {
+            vibrationHandler.removeCallbacksAndMessages(null);
+        }
+        if (vibrator != null) {
+            vibrator.cancel();
         }
     }
 
@@ -278,14 +320,20 @@ public class MainActivity extends AppCompatActivity {
                 soundPool.play(beepSound, 1, 1, 0, 0, 1);
             }
         }, 0); // First beep immediately
-
-
+    }
+    private void playNormalBeeps() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                normal_soundPool.play(normal_beepSound, 1, 1, 0, 0, 1);
+            }
+        }, 0); // First beep immediately
     }
 
     public void settings(View view) {
         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-
     }
+
     public static void checkApp(Activity activity) {
         String appName = "SocketApp";
 
@@ -350,6 +398,16 @@ public class MainActivity extends AppCompatActivity {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
+        }
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!Stash.getBoolean("vibrate", false)) {
+            stopVibration();
         }
     }
 }
