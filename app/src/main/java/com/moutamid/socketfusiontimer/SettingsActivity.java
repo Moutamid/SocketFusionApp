@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
     private void loadSettings() {
-        switchCountDown.setChecked(Stash.getBoolean("count_down", false));
+        switchCountDown.setChecked(Stash.getBoolean("count_up", false));
         switchReadySound.setChecked(Stash.getBoolean("ready_sound", true));
         switchCompletionSound.setChecked(Stash.getBoolean("completion_sound", true));
         switchVoiceCommands.setChecked(Stash.getBoolean("voice_commands", false));
@@ -68,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             int id = buttonView.getId();
             if (id == R.id.switchCountDown) {
-                Stash.put("count_down", isChecked);
+                Stash.put("count_up", isChecked);
             } else if (id == R.id.switchReadySound) {
                 Stash.put("ready_sound", isChecked);
             } else if (id == R.id.switchCompletionSound) {

@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:fontFamily="@font/lexend_medium"
-            android:text="Count Down / Count Down"
+            android:text="Count Up"
             android:textSize="15sp" />
 
         <TextView
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-
+android:visibility="gone"
             android:fontFamily="@font/lexend_medium"
             android:text="Voice Commands"
             android:textSize="15sp" />
