@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     private long finalremainingDurationUp = 0;
     private long finalremainingDurationDown = 0;
-
+    TextView phase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         checkApp(MainActivity.this);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         spinnerPipeSizes = findViewById(R.id.spinnerPipeSizes);
+        phase = findViewById(R.id.phase);
         layout = findViewById(R.id.layout);
         Stash.put("phase", "null");
         List<PipeSize> pipeSizes = new ArrayList<>();
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 //                        finalDuration = 5000; // 30 seconds
 
                         } else if (pos == 1) {
-                            int seekBar1 = Stash.getInt("seekBar1", 11);
+                            int seekBar1 = Stash.getInt("seekBar1", 16);
                             initialDuration = seekBar1 * 1000;
 
                             if (Stash.getBoolean("count_up")) {
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             finalDuration = 30000; // 30 seconds
 
                         } else if (pos == 2) {
-                            int seekBar114 = Stash.getInt("seekBar114", 11);
+                            int seekBar114 = Stash.getInt("seekBar114", 19);
                             initialDuration = seekBar114 * 1000;
                             if (Stash.getBoolean("count_up")) {
                                 startInitialTimerUP(seekBar114);
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                             finalDuration = 60000; // 60 seconds
 
                         } else if (pos == 3) {
-                            int seekBar112 = Stash.getInt("seekBar112", 11);
+                            int seekBar112 = Stash.getInt("seekBar112", 22);
                             initialDuration = seekBar112 * 1000;
                             if (Stash.getBoolean("count_up")) {
                                 startInitialTimerUP(seekBar112);
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                             finalDuration = 60000; // 60 seconds
 
                         } else if (pos == 4) {
-                            int seekBar2 = Stash.getInt("seekBar2", 11);
+                            int seekBar2 = Stash.getInt("seekBar2", 26);
                             initialDuration = seekBar2 * 1000;
                             if (Stash.getBoolean("count_up")) {
                                 startInitialTimerUP(seekBar2);
@@ -166,11 +167,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         resumeTimers();
                         resetButton.setText("Reset");
-
                     }
-
                     startStopButton.setText("Stop");
-
                 } else {
                     pauseTimers();
                     stopVibration();
@@ -232,14 +230,20 @@ public class MainActivity extends AppCompatActivity {
                 long seconds = millisUntilFinished / 1000;
                 timerTextView.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                 if (millisUntilFinished > 4000) {
+                    phase.setText("Verify Face Temp 500°F +/- 10°F");
+
                     layout.setBackgroundColor(getColor(R.color.skyblue));
                 } else {
+
                     layout.setBackgroundColor(getColor(R.color.yellow));
                     if (Stash.getBoolean("ready_sound", true)) {
                         playBeeps();
                     }
                 }
                 if (millisUntilFinished < 1000) {
+                    phase.setText("Ready phase");
+
+
                     if (Stash.getBoolean("ready_sound", true)) {
                         if (soundPool != null) {
                             soundPool.release();
@@ -307,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
         timerRunnable = new Runnable() {
             @Override
             public void run() {
+                phase.setText("Verify Face Temp 500°F +/- 10°F");
                 Stash.put("phase", "up_1");
                 secondsPassed++;
                 remainingDurationUp = secondsPassed;
@@ -317,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
                 if (secondsPassed < (finalSecond - 3)) {
                     handler_up.postDelayed(this, 1000);
                     layout.setBackgroundColor(getColor(R.color.skyblue));
+
                 } else if (secondsPassed >= (finalSecond - 3) && secondsPassed < finalSecond) {
                     handler_up.postDelayed(this, 1000);
                     layout.setBackgroundColor(getColor(R.color.yellow));
@@ -369,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
                 timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
                 if (secondsPassed < finalSecond) {
                     handler_up.postDelayed(this, 1000);
-
+                    phase.setText("Ready phase");
                     layout.setBackgroundColor(getColor(R.color.green));
                 } else {
                     startInitialFinalUp(30);
@@ -400,6 +406,8 @@ public class MainActivity extends AppCompatActivity {
                 int seconds = secondsPassed % 60;
                 timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
                 if (secondsPassed < finalSecond) {
+                    phase.setText("Cooling phase");
+
                     layout.setBackgroundColor(getColor(R.color.white));
                     handler_up.postDelayed(this, 1000);
 
@@ -408,6 +416,7 @@ public class MainActivity extends AppCompatActivity {
                     layout.setBackgroundColor(getColor(R.color.white));
                     timerTextView.setText(String.format("%02d:%02d", 0, 0));
                     secondsPassed = 0;
+                    phase.setText("");
 
                 }
             }
@@ -416,6 +425,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startShortTimer2() {
+        phase.setText("Ready phase");
+
         cooldownTimer = new CountDownTimer(shortTimer2Duration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -439,6 +450,8 @@ public class MainActivity extends AppCompatActivity {
         heatingTimer = new CountDownTimer(finalDuration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                phase.setText("Cooling phase");
+
                 Stash.put("phase", "down_3");
                 remainingDurationDown = millisUntilFinished;
 
@@ -451,6 +464,8 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 stopVibration();
                 resetTimer();
+                phase.setText("");
+
 
             }
         }.start();
@@ -687,7 +702,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 finalDuration = 30000; // 30 seconds
             } else if (pos == 1) {
-                int seekBar1 = Stash.getInt("seekBar1", 11);
+                int seekBar1 = Stash.getInt("seekBar1", 16);
                 initialDuration = seekBar1 * 1000;
 
                 if (Stash.getBoolean("count_up")) {
@@ -698,7 +713,7 @@ public class MainActivity extends AppCompatActivity {
                 finalDuration = 30000; // 30 seconds
 
             } else if (pos == 2) {
-                int seekBar114 = Stash.getInt("seekBar114", 11);
+                int seekBar114 = Stash.getInt("seekBar114", 19);
                 initialDuration = seekBar114 * 1000;
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar114);
@@ -708,7 +723,7 @@ public class MainActivity extends AppCompatActivity {
                 finalDuration = 60000; // 60 seconds
 
             } else if (pos == 3) {
-                int seekBar112 = Stash.getInt("seekBar112", 11);
+                int seekBar112 = Stash.getInt("seekBar112", 22);
                 initialDuration = seekBar112 * 1000;
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar112);
@@ -717,7 +732,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 finalDuration = 60000; // 60 seconds
             } else if (pos == 4) {
-                int seekBar2 = Stash.getInt("seekBar2", 11);
+                int seekBar2 = Stash.getInt("seekBar2", 26);
                 initialDuration = seekBar2 * 1000;
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar2);
