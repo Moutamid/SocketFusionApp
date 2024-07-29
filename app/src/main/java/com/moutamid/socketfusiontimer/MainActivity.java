@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -671,7 +672,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void restart() {
 
-
+phase_text.setText("");
         if (heatingTimer != null) {
             heatingTimer.cancel();
         }
