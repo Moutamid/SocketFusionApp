@@ -3,6 +3,9 @@ package com.moutamid.socketfusiontimer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -26,7 +29,13 @@ public class SettingsActivity extends AppCompatActivity {
         switchVoiceCommands = findViewById(R.id.switchVoiceCommands);
         switchSoundOnly = findViewById(R.id.switchSoundOnly);
         switchVibrate = findViewById(R.id.switchVibrate);
+        WebView webView = findViewById(R.id.webview);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
 
+        // Load the URL
+        webView.loadUrl("https://www.geo-flo.com/");
         // Load the saved states
         loadSettings();
 

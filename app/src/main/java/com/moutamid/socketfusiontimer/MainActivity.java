@@ -40,7 +40,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Spinner spinnerPipeSizes;
-    private TextView timerTextView;
+    private TextView timerTextView, phase_text;
     private Button startStopButton;
     private Button resetButton;
     private CountDownTimer heatingTimer;
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         spinnerPipeSizes = findViewById(R.id.spinnerPipeSizes);
         phase = findViewById(R.id.phase);
         layout = findViewById(R.id.layout);
+        phase_text = findViewById(R.id.phase_text);
         Stash.put("phase", "null");
         List<PipeSize> pipeSizes = new ArrayList<>();
         pipeSizes.add(new PipeSize("3/4\"", "#FF0000"));  // Red
@@ -234,14 +235,14 @@ public class MainActivity extends AppCompatActivity {
 
                     layout.setBackgroundColor(getColor(R.color.skyblue));
                 } else {
-
+                    phase_text.setText("Get Ready");
                     layout.setBackgroundColor(getColor(R.color.yellow));
                     if (Stash.getBoolean("ready_sound", true)) {
                         playBeeps();
                     }
                 }
                 if (millisUntilFinished < 1000) {
-                    phase.setText("Ready phase");
+                    phase_text.setText("Get Ready");
 
 
                     if (Stash.getBoolean("ready_sound", true)) {
@@ -249,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                             soundPool.release();
                         }
                     }
+                    phase_text.setText("Fuse Joints");
                     layout.setBackgroundColor(getColor(R.color.green));
                     if (Stash.getBoolean("completion_sound", true)) {
                         mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.completion_beep);
@@ -269,6 +271,8 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 // Final actions when timer finishes, if any
                 layout.setBackgroundColor(getColor(R.color.green));
+                phase_text.setText("Fuse Joints");
+
                 startShortTimer2();
             }
         }.start();
@@ -326,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (secondsPassed >= (finalSecond - 3) && secondsPassed < finalSecond) {
                     handler_up.postDelayed(this, 1000);
                     layout.setBackgroundColor(getColor(R.color.yellow));
+                    phase_text.setText("Get Ready");
+
                     if (Stash.getBoolean("ready_sound", true)) {
                         playBeeps();
                     }
@@ -375,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
                 if (secondsPassed < finalSecond) {
                     handler_up.postDelayed(this, 1000);
-                    phase.setText("Ready phase");
+                    phase_text.setText("Fuse Joints");
                     layout.setBackgroundColor(getColor(R.color.green));
                 } else {
                     startInitialFinalUp(30);
@@ -406,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                 int seconds = secondsPassed % 60;
                 timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
                 if (secondsPassed < finalSecond) {
-                    phase.setText("Cooling phase");
+                    phase_text.setText("Cooling phase");
 
                     layout.setBackgroundColor(getColor(R.color.white));
                     handler_up.postDelayed(this, 1000);
@@ -416,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
                     layout.setBackgroundColor(getColor(R.color.white));
                     timerTextView.setText(String.format("%02d:%02d", 0, 0));
                     secondsPassed = 0;
-                    phase.setText("");
+                    phase_text.setText("");
 
                 }
             }
@@ -425,13 +431,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startShortTimer2() {
-        phase.setText("Ready phase");
 
         cooldownTimer = new CountDownTimer(shortTimer2Duration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 Stash.put("phase", "down_2");
                 remainingDurationDown = millisUntilFinished;
+                phase_text.setText("Fuse Joints");
 
 
                 long seconds = millisUntilFinished / 1000;
@@ -450,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
         heatingTimer = new CountDownTimer(finalDuration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                phase.setText("Cooling phase");
+                phase_text.setText("Cooling phase");
 
                 Stash.put("phase", "down_3");
                 remainingDurationDown = millisUntilFinished;
@@ -464,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 stopVibration();
                 resetTimer();
-                phase.setText("");
+                phase_text.setText("");
 
 
             }
@@ -721,7 +727,6 @@ public class MainActivity extends AppCompatActivity {
                     startInitialTimer();
                 }
                 finalDuration = 60000; // 60 seconds
-
             } else if (pos == 3) {
                 int seekBar112 = Stash.getInt("seekBar112", 22);
                 initialDuration = seekBar112 * 1000;
@@ -752,11 +757,9 @@ public class MainActivity extends AppCompatActivity {
              finalDuration = 30000;
              secondsPassed = 0;
 
-
             //Remaining time
              remainingDurationUp = 0;
              remainingDurationDown = 0;
-
              finalremainingDurationUp = 0;
              finalremainingDurationDown = 0;
 
