@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -17,14 +18,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fxn.stash.Stash;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.moutamid.socketfusiontimer.adapter.PipeSizeAdapter;
 import com.moutamid.socketfusiontimer.model.PipeSize;
 
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler vibrationHandler;
     private MediaPlayer mediaPlayer;
     private long initialDuration = 15000;
-    private long shortTimer2Duration = 3000;
+    private long shortTimer2Duration = 4000;
     private long finalDuration = 30000;
     private int pos;
     private Vibrator vibrator;
@@ -70,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
     //Remaining time
     private long remainingDurationUp = 0;
     private long remainingDurationDown = 0;
-
     private long finalremainingDurationUp = 0;
     private long finalremainingDurationDown = 0;
     TextView phase;
-
+    private DatabaseReference userStatusRef, databaseReference;
+    private String userId;
+    ImageView geo_flo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +87,24 @@ public class MainActivity extends AppCompatActivity {
         checkApp(MainActivity.this);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         spinnerPipeSizes = findViewById(R.id.spinnerPipeSizes);
+        geo_flo = findViewById(R.id.geo_flo);
         phase = findViewById(R.id.phase);
         layout = findViewById(R.id.layout);
         phase_text = findViewById(R.id.phase_text);
+        timerTextView = findViewById(R.id.timerTextView);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("SocketApp").child("Users");
+        String email = Stash.getString("email");
+        userId = email.replace(".", ",");
+        userStatusRef = FirebaseDatabase.getInstance().getReference("SocketApp").child("Users").child(userId).child("status");
+        userStatusRef.setValue("online");
+        geo_flo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://www.geo-flo.com/"; // Replace with your URL
+                openWebPage(url);
+            }
+        });
         Stash.put("phase", "null");
         List<PipeSize> pipeSizes = new ArrayList<>();
         pipeSizes.add(new PipeSize("3/4\"", "#FF0000"));  // Red
@@ -98,6 +118,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 pos = position;
+                if (pos == 0) {
+                    timerTextView.setText("00:11");
+
+                } else if (pos == 1) {
+                    timerTextView.setText("00:16");
+                } else if (pos == 2) {
+                    timerTextView.setText("00:19");
+                } else if (pos == 3) {
+                    timerTextView.setText("00:22");
+                } else if (pos == 4) {
+                    timerTextView.setText("00:26");
+                }
             }
 
             @Override
@@ -105,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        timerTextView = findViewById(R.id.timerTextView);
         startStopButton = findViewById(R.id.startStopButton);
         resetButton = findViewById(R.id.resetButton);
         startStopButton.setOnClickListener(new View.OnClickListener() {
@@ -277,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
                 startShortTimer2();
             }
         }.start();
+
     }
 
     private void startInitialTimerUP(final int finalSecond) {
@@ -461,8 +493,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Stash.put("phase", "down_3");
                 remainingDurationDown = millisUntilFinished;
-
-                long seconds = millisUntilFinished / 1000;
+                long seconds = (millisUntilFinished + 999) / 1000; // Adjust for precise countdown
                 timerTextView.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
                 layout.setBackgroundColor(getColor(R.color.white));
             }
@@ -594,9 +625,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        userStatusRef.setValue("online");
         if (!Stash.getBoolean("vibrate", false)) {
             stopVibration();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        userStatusRef.setValue("offline");
+        userStatusRef.getParent().child("last_seen").setValue(ServerValue.TIMESTAMP);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Ensure status is set to offline when the activity is destroyed
+        userStatusRef.setValue("offline");
+        userStatusRef.getParent().child("last_seen").setValue(ServerValue.TIMESTAMP);
     }
 
     public void pauseTimers() {
@@ -766,5 +813,11 @@ phase_text.setText("");
 
 
         }
+    }
+
+    private void openWebPage(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        startActivity(intent);
     }
 }

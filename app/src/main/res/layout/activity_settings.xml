@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="21dp">
-
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -39,9 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:onClick="timer"
+            android:layout_marginStart="8dp"
             android:layout_marginBottom="13dp"
             android:fontFamily="@font/lexend_semi_bold"
-            android:text="Timer Options\n(to make custom times for pipe sizes)"
+            android:text="Timer Options"
             android:textSize="15sp" />
 
         <Switch
@@ -53,15 +53,7 @@
             android:text="Count Up"
             android:textSize="15sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="-5dp"
-            android:layout_marginEnd="52dp"
-            android:fontFamily="@font/lexend_light"
-            android:text="(if you enable this it means, Starts a 0 and increases till the end range and vice versa)"
-            android:textSize="12sp" />
+
         <Switch
             android:id="@+id/switchReadySound"
             android:layout_width="match_parent"

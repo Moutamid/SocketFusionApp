@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -13,7 +15,6 @@ android {
         versionCode = 1
         versionName = "1.0"
         setProperty("archivesBaseName", "SocketApp-$versionName")
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,7 +34,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -44,5 +44,8 @@ dependencies {
     implementation("com.github.moisoni97:IndicatorSeekBar:3.0.0")
     implementation("com.fxn769:stash:1.3.2")
     implementation("com.github.maxwellobi:android-speech-recognition:v1.0.0-beta.1")
-
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-database:21.0.0")
 }
