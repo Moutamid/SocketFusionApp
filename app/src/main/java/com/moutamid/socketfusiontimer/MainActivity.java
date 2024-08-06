@@ -119,16 +119,25 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 pos = position;
                 if (pos == 0) {
-                    timerTextView.setText("00:11");
+                    int seekBar34 = Stash.getInt("seekBar34", 11);
 
+                    timerTextView.setText("00:"+seekBar34);
                 } else if (pos == 1) {
-                    timerTextView.setText("00:16");
+                    int seekBar1 = Stash.getInt("seekBar1", 16);
+
+                    timerTextView.setText("00:"+seekBar1);
                 } else if (pos == 2) {
-                    timerTextView.setText("00:19");
+                    int seekBar114 = Stash.getInt("seekBar114", 19);
+
+                    timerTextView.setText("00:"+seekBar114);
                 } else if (pos == 3) {
-                    timerTextView.setText("00:22");
+                    int seekBar112 = Stash.getInt("seekBar112", 22);
+
+                    timerTextView.setText("00:"+seekBar112);
                 } else if (pos == 4) {
-                    timerTextView.setText("00:26");
+                    int seekBar2 = Stash.getInt("seekBar2", 26);
+
+                    timerTextView.setText("00:"+seekBar2);
                 }
             }
 
@@ -175,8 +184,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 startInitialTimer();
                             }
-                            finalDuration = 60000; // 60 seconds
-
+                            finalDuration = 60000;
                         } else if (pos == 3) {
                             int seekBar112 = Stash.getInt("seekBar112", 22);
                             initialDuration = seekBar112 * 1000;
@@ -185,8 +193,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 startInitialTimer();
                             }
-                            finalDuration = 60000; // 60 seconds
-
+                            finalDuration = 60000;
                         } else if (pos == 4) {
                             int seekBar2 = Stash.getInt("seekBar2", 26);
                             initialDuration = seekBar2 * 1000;
@@ -195,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 startInitialTimer();
                             }
-                            finalDuration = 60000; // 60 seconds
+                            finalDuration = 60000;
                         }
                     } else {
                         resumeTimers();
@@ -215,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 restart();
             }
         });
@@ -490,7 +496,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 phase_text.setText("Cooling phase");
-
                 Stash.put("phase", "down_3");
                 remainingDurationDown = millisUntilFinished;
                 long seconds = (millisUntilFinished + 999) / 1000; // Adjust for precise countdown
@@ -625,10 +630,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+
         userStatusRef.setValue("online");
         if (!Stash.getBoolean("vibrate", false)) {
             stopVibration();
         }
+
     }
 
     @Override
@@ -748,6 +756,7 @@ phase_text.setText("");
         if (resetButton.getText().toString().equals("Restart")) {
             if (pos == 0) {
                 int seekBar34 = Stash.getInt("seekBar34", 11);
+                Log.d("seekbar", "1. "+ seekBar34);
                 initialDuration = seekBar34 * 1000;
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar34);
@@ -758,6 +767,7 @@ phase_text.setText("");
             } else if (pos == 1) {
                 int seekBar1 = Stash.getInt("seekBar1", 16);
                 initialDuration = seekBar1 * 1000;
+                Log.d("seekbar", "2. "+ seekBar1);
 
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar1);
@@ -769,6 +779,8 @@ phase_text.setText("");
             } else if (pos == 2) {
                 int seekBar114 = Stash.getInt("seekBar114", 19);
                 initialDuration = seekBar114 * 1000;
+                Log.d("seekbar", "3. "+ seekBar114);
+
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar114);
                 } else {
@@ -778,6 +790,8 @@ phase_text.setText("");
             } else if (pos == 3) {
                 int seekBar112 = Stash.getInt("seekBar112", 22);
                 initialDuration = seekBar112 * 1000;
+                Log.d("seekbar", "4. "+ seekBar112);
+
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar112);
                 } else {
@@ -786,6 +800,8 @@ phase_text.setText("");
                 finalDuration = 60000; // 60 seconds
             } else if (pos == 4) {
                 int seekBar2 = Stash.getInt("seekBar2", 26);
+                Log.d("seekbar", "5. "+ seekBar2);
+
                 initialDuration = seekBar2 * 1000;
                 if (Stash.getBoolean("count_up")) {
                     startInitialTimerUP(seekBar2);

@@ -1,6 +1,7 @@
 package com.moutamid.socketfusiontimer;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,8 @@ public class HeatingTimeOptionsActivity extends AppCompatActivity {
             @Override
             public void onSeeking(SeekParams seekParams) {
                 Stash.put("seekBar34", seekParams.progress);
+                Log.d("seekbar", "1. "+ seekParams.progress);
+
 
             }
 
@@ -63,6 +66,7 @@ public class HeatingTimeOptionsActivity extends AppCompatActivity {
             @Override
             public void onSeeking(SeekParams seekParams) {
                 Stash.put("seekBar1", seekParams.progress);
+                Log.d("seekbar", "2. "+ seekParams.progress);
 
             }
 
@@ -80,6 +84,7 @@ public class HeatingTimeOptionsActivity extends AppCompatActivity {
             @Override
             public void onSeeking(SeekParams seekParams) {
                 Stash.put("seekBar114", seekParams.progress);
+                Log.d("seekbar", "3. "+ seekParams.progress);
 
             }
 
@@ -97,6 +102,7 @@ public class HeatingTimeOptionsActivity extends AppCompatActivity {
             @Override
             public void onSeeking(SeekParams seekParams) {
                 Stash.put("seekBar112", seekParams.progress);
+                Log.d("seekbar", "4. "+ seekParams.progress);
 
             }
 
@@ -114,6 +120,8 @@ public class HeatingTimeOptionsActivity extends AppCompatActivity {
             @Override
             public void onSeeking(SeekParams seekParams) {
                 Stash.put("seekBar2", seekParams.progress);
+                Log.d("seekbar", "5. "+ seekParams.progress);
+
 
             }
 

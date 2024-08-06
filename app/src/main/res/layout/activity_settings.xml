@@ -51,6 +51,7 @@
             android:layout_margin="8dp"
             android:fontFamily="@font/lexend_medium"
             android:text="Count Up"
+            android:visibility="gone"
             android:textSize="15sp" />
 
 

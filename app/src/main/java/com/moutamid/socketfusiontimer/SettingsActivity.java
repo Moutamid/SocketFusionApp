@@ -9,15 +9,12 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.fxn.stash.Stash;
 
 public class SettingsActivity extends AppCompatActivity {
     Button btnNext;
     private Switch switchCountDown, switchReadySound, switchCompletionSound, switchVoiceCommands, switchSoundOnly, switchVibrate;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +30,8 @@ public class SettingsActivity extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
-
-        // Load the URL
-        webView.loadUrl("https://www.geo-flo.com/");
-        // Load the saved states
+        webView.loadUrl("http://www.geo-flo.com/fusion-procedures/");
         loadSettings();
-
-        // Set listeners to save the state when changed
         switchCountDown.setOnCheckedChangeListener(new SettingsChangeListener());
         switchReadySound.setOnCheckedChangeListener(new SettingsChangeListener());
         switchCompletionSound.setOnCheckedChangeListener(new SettingsChangeListener());
@@ -50,13 +42,14 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-
+                finish();
             }
         });
     }
 
     public void back(View view) {
-        onBackPressed();
+        startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+        finish();
     }
 
     public void timer(View view) {
